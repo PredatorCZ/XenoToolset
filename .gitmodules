@@ -1,0 +1,6 @@
+[submodule "3rd_party/xenolib"]
+	path = 3rd_party/xenolib
+	url = https://github.com/PredatorCZ/XenoLib.git
+[submodule "3rd_party/pugixml"]
+	path = 3rd_party/pugixml
+	url = https://github.com/zeux/pugixml.git
