@@ -22,7 +22,15 @@
 #include "datas/MultiThread.hpp"
 #include "datas/esstring.h"
 #include "datas/masterprinter.hpp"
+
+#if _MSC_VER
 #include <tchar.h>
+#else
+#define _tmain main
+#define _TCHAR char
+#include <sys/stat.h>
+#define _tmkdir(lVal) mkdir(lVal, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
+#endif
 
 static const char help[] = "Usage: casmExtract [options] <casmhd file>\n\
 casmhd file can be also drag'n'dropped onto application.\n\n\
@@ -915,7 +923,11 @@ void ExtractEffects(DataFile *data, int count, const TSTRING &outFolder, BinRead
 int _tmain(int argc, _TCHAR *argv[])
 {
 	setlocale(LC_ALL, "");
+	#ifdef UNICODE
 	printer.AddPrinterFunction(wprintf);
+	#else
+	printer.AddPrinterFunction(reinterpret_cast<void*>(printf));
+	#endif
 
 	printline("Xenoblade X CASM Extractor by Lukas Cone in 2019.\n");
 

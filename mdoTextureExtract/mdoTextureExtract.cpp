@@ -23,6 +23,13 @@
 #include "datas/MultiThread.hpp"
 #include "pugixml.hpp"
 
+#ifndef _MSC_VER
+#define _tmain main
+#define _TCHAR char
+#include <sys/stat.h>
+#define _tmkdir(lVal) mkdir(lVal, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
+#endif
+
 static struct mdoTex : SettingsManager
 {
 	DECLARE_REFLECTOR;
@@ -70,7 +77,12 @@ struct TextureQueue
 int _tmain(int argc, _TCHAR *argv[])
 {
 	setlocale(LC_ALL, "");
+	#ifdef UNICODE
 	printer.AddPrinterFunction(wprintf);
+	#else
+	printer.AddPrinterFunction(reinterpret_cast<void*>(printf));
+	#endif
+
 
 	printline("Xenoblade Model Texture Extractor by Lukas Cone in 2019.\nSimply drag'n'drop files into application or use as mdoTextureExtract file1 file2 ...\n");
 
