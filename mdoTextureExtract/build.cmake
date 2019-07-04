@@ -8,9 +8,7 @@ ${PROJECT_NAME}/${PROJECT_NAME}.cpp
 3rd_party/xenolib/3rd_party/precore/datas/reflectorXML.cpp
 )
 
-find_library(fndXenoLib XenoLib PATHS "${CMAKE_BINARY_DIR}/xenolib")
-
-target_link_libraries(${PROJECT_NAME} ${fndXenoLib})
+target_link_libraries(${PROJECT_NAME} XenoLib)
 
 include_directories("./3rd_party/xenolib/include/")
 include_directories("./3rd_party/xenolib/3rd_party/precore/")
