@@ -23,6 +23,11 @@
 #include "datas/binreader.hpp"
 #include "pugixml.hpp"
 
+#ifndef _MSC_VER
+#define _tmain main
+#define _TCHAR char
+#endif
+
 static struct xenoTex : SettingsManager
 {
 	DECLARE_REFLECTOR;
@@ -73,7 +78,7 @@ TexQueueTraits::return_type TexQueueTraits::RetreiveItem()
 
 	printline("Loading file: ", << curFile);
 
-	rd.Seek(-4, SEEK_END);
+	rd.Seek(-4, std::ios_base::seekdir::_S_cur);
 
 	int magic;
 	const int fileSize = static_cast<int>(rd.GetSize());
@@ -114,8 +119,12 @@ TexQueueTraits::return_type TexQueueTraits::RetreiveItem()
 int _tmain(int argc, _TCHAR *argv[])
 {
 	setlocale(LC_ALL, "");
+	#ifdef UNICODE
 	printer.AddPrinterFunction(wprintf);
-
+	#else
+	printer.AddPrinterFunction(reinterpret_cast<void*>(printf));
+	#endif
+	
 	printline("Xenoblade Texture Converter by Lukas Cone in 2019.\nSimply drag'n'drop files into application or use as xenoTextureConvert file1 file2 ...\n");
 
 	TFileInfo configInfo(*argv);

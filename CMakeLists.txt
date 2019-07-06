@@ -1,12 +1,47 @@
 cmake_minimum_required(VERSION 3.3)
 
+set(UNICODE TRUE)
+set(RELEASEVER FALSE)
 
-set (UNICODE TRUE)
+add_subdirectory(3rd_party/xenolib)
 
-set(XenoLib_MASTER_DIR 3rd_party/xenolib)
-include(3rd_party/xenolib/build.cmake)
-include(casmExtract/build.cmake)
-include(mdoTextureExtract/build.cmake)
+project(mdoTextureExtract
+VERSION 1.1.0)
+
+add_executable(${PROJECT_NAME}
+${PROJECT_NAME}/${PROJECT_NAME}.cpp
+3rd_party/pugixml/src/pugixml.cpp
+3rd_party/xenolib/3rd_party/precore/datas/reflector.cpp
+3rd_party/xenolib/3rd_party/precore/datas/reflectorXML.cpp
+)
+
+target_link_libraries(${PROJECT_NAME} XenoLib Threads::Threads)
+
+include_directories(3rd_party/xenolib/include/)
+include_directories(3rd_party/xenolib/3rd_party/precore/)
+include_directories(3rd_party/pugixml/src/)
+
+project(casmExtract
+VERSION 1.0.0)
+
+add_executable(${PROJECT_NAME} ${PROJECT_NAME}/${PROJECT_NAME}.cpp)
+target_link_libraries(${PROJECT_NAME} XenoLib Threads::Threads)
+
+project(xenoTextureConvert
+VERSION 1.0.0)
+
+add_executable(${PROJECT_NAME}
+${PROJECT_NAME}/xenoTex.cpp
+3rd_party/pugixml/src/pugixml.cpp
+3rd_party/xenolib/3rd_party/precore/datas/reflector.cpp
+3rd_party/xenolib/3rd_party/precore/datas/reflectorXML.cpp
+)
+
+target_link_libraries(${PROJECT_NAME} XenoLib Threads::Threads)
+
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+find_package(Threads REQUIRED)
 
 if (WIN32 AND UNICODE)
 	message(STATUS "Compiling with wchar_t")
@@ -14,5 +49,19 @@ if (WIN32 AND UNICODE)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-offsetof -pthread")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-offsetof")
 endif()
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+	message(STATUS "Architecture: X86")
+else()
+	message(STATUS "Architecture: X64")
+endif()
+
+if (RELEASEVER)
+	set(CMAKE_BUILD_TYPE Release)
+else()
+	set(CMAKE_BUILD_TYPE Debug)
+endif()
+
+message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
