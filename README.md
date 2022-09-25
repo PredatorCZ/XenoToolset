@@ -1,3 +1,7 @@
+This repo has been archived, it contains out of date toolset.
+
+Further development/releases will be available in [XenobladeToolset](https://github.com/PredatorCZ/XenoLib/tree/master/toolset) subproject for XenokLib.
+
 # XenoToolset
 Xenoblade Toolset is collection of modding tools for Xenoblade Engine titles.
 
